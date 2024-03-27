@@ -1,4 +1,5 @@
-from music.musician_module import Musician
+# from music.musician_module import Musician
+from music.musician import Musician
 
 # Data
 
@@ -13,6 +14,13 @@ mickJagger = Musician('Mick Jagger')          # default: is_band_member=True
 keithRichards = Musician('Keith Richards')
 charlieWatts = Musician('Charlie Watts')
 ronWood = Musician('Ron Wood')
+
+# The Yardbirds
+jimMcCarty = Musician('Jim McCarty')
+chrisDreja = Musician('Chris Dreja')
+keithRelf = Musician('Keith Relf')
+jeffBeck = Musician('Jeff Beck')
+paulSamwellSmith = Musician('Paul Samwell-Smith')
 
 # Pink Floyd
 sydBarrett = Musician('Syd Barrett')
