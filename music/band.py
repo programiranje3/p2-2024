@@ -30,7 +30,7 @@ class Band:
     # Class variables: like static fields in Java; typically defined and initialized before __init__()
     # Insert a class variable (static field), such as genres, date_pattern,...
 
-    genres = ['rock\'n\'roll', 'blues', 'alternative']
+    genres = ['rock', 'blues', 'soul']
 
     def __init__(self, name, *members, start=date.today(), end=date.today()):
         self.name = name
@@ -44,17 +44,16 @@ class Band:
 
     def __str__(self):
         m = ', '.join([m.name for m in self.members]) if self.members else ''
-        start = self.start.year
-        end = self.end.year
-        return f'{self.name}: {m} ({start}-{end})'
+        k = f'{self.start.year}-{self.end.year}' if self.start and self.end else '(years unknown)'
+        return f'{self.name}\n{m}\n{k}'
 
     def __eq__(self, other):
-        pass
+
         # Musician objects are unhashable, so comparing the members tuples from self and other directly does not work;
         # see https://stackoverflow.com/a/14721133/1899061, https://stackoverflow.com/a/17236824/1899061
         # return self == other if isinstance(other, Band) else False    # No! Musician objects are unhashable!
         # However, this works:
-        return self.__dict__ == other.__dict__ if isinstance(other, Band) else False
+        # return self.__dict__ == other.__dict__ if isinstance(other, Band) else False
 
         # # members must be compared 'both ways', because the two tuples can be of different length
         # m_diff_1 = [x for x in self.members if x not in other.members]
@@ -63,13 +62,15 @@ class Band:
 
         # members must be compared 'both ways', because the two tuples can be of different length
 
+        return self.__dict__ == other.__dict__ if isinstance(other, Band) else False
+
     @staticmethod
     def is_date_valid(d):
         """It is assumed that a band does not perform together since more than ~60 years ago.
         So, the valid date to denote the start of a band's career is between Jan 01, 1960, and today.
         """
 
-        return True if isinstance(d, date) and d.year > 1954 else False
+        return True if isinstance(d, date) and date(1954, 7, 5) <= d <= date.today() else False
 
     def __iter__(self):
         """Once __iter__() and __next__() are implemented in a class,
@@ -95,37 +96,27 @@ class Band:
 # Check class variables
 print(Band.genres[0])
 
-
 #%%
 # Test the basic methods (__init__(), __str__(),...)
-the_yardbirds = Band('The Yardbirds',
-                     *[jeffBeck, keithRelf, paulSamwellSmith, chrisDreja, jimMcCarty],
-                     start=date(1963, 10, 15), end=date(1968, 7, 7))
+the_yardbirds = Band('The Yardbirds', *[keithRelf, jimMcCarty, jeffBeck, chrisDreja, paulSamwellSmith],
+                     start=date(1963, 10, 16), end=date(1968, 7, 7))
 print(the_yardbirds)
-print(the_yardbirds == Band('The Yardbirds',
-                            *[jeffBeck, keithRelf, paulSamwellSmith, chrisDreja, jimMcCarty],
-                            start=date(1963, 10, 15), end=date(1968, 7, 7)))
-
+print(the_yardbirds == Band('The Yardbirds', *[keithRelf, jimMcCarty, jeffBeck, chrisDreja, paulSamwellSmith],
+                            start=date(1963, 10, 16), end=date(1968, 7, 7)))
 
 #%%
 # Test the date validator (@staticmethod is_date_valid(<date>))
-print(Band.is_date_valid(date(1963, 10, 15)))
-
+print(Band.is_date_valid(date(1951, 10, 16)))
 
 #%%
-# Test the iterator
-the_yardbirds = Band('The Yardbirds',
-                     *[jeffBeck, keithRelf, paulSamwellSmith, chrisDreja, jimMcCarty],
-                     start=date(1963, 10, 15), end=date(1968, 7, 7))
-# i = iter(the_yardbirds)
-# # print(i)
-# for _ in range(len(the_yardbirds.members)):
-#     print(next(i))
-# print(next(i))
-
+# Test the iterator (initialize it with iter(<band>) and call next(<iterator) in a loop to return all <band> members)
 i = iter(the_yardbirds)
-for m in i:
-    print(m)
+# print(i)
+while 2:
+    try:
+        print(next(i))
+    except StopIteration:
+        break
 # print(next(i))
 
 
@@ -137,35 +128,35 @@ def next_member(band):
     """
 
     for m in band.members:
-        input('Next:')
+        input('Next: ')
         yield m
         print('Yeah!')
 
 
 #%%
 # Test next_member(band)
-the_yardbirds = Band('The Yardbirds',
-                     *[jeffBeck, keithRelf, paulSamwellSmith, chrisDreja, jimMcCarty],
-                     start=date(1963, 10, 15), end=date(1968, 7, 7))
+# (initialize it with next_member(<band>) and call next(<generator>) in a loop to return/generate all <band> members)
+
 g = next_member(the_yardbirds)
 print(g)
-while 1:
-    try:
-        print(next(g))
-    except StopIteration:
-        break
-
-#%%
-# Demonstrate generator expressions
-g = (i**2 for i in range(1, 4))
-print(g)
-while 1:
+while 9:
     try:
         print(next(g))
     except StopIteration:
         break
 # print(next(g))
-print(i**2 for i in range(1, 4))
+
+#%%
+# Demonstrate generator expressions
+
+g = (x**2 for x in range(3))
+print(g)
+while 2:
+    try:
+        print(next(g))
+    except StopIteration:
+        break
+print(next(g))
 
 #%%
 # Demonstrate JSON encoding/decoding of Band objects
@@ -186,7 +177,7 @@ print(i**2 for i in range(1, 4))
 # so you might have to provide cls_lookup_map when decoding.
 
 # Single object
-from json_tricks import loads, dumps
+# from json_tricks import loads, dumps
 
 # List of objects
 
@@ -213,6 +204,9 @@ class BandNameError(BandError):
     """
 
     def __init__(self, name):
+        """ It is usually sufficient just to call Exception.__init__() and pass self and an f-string that
+        includes the other argument(s) and prints the error message;
+        it can be followed by self.<other> = <other> statement(s) for completeness."""
         pass
 
 
@@ -244,12 +238,14 @@ class BandNameError(BandError):
 # theRollingStones = Band('The Rolling Stones', *[mickJagger, keithRichards, ronWood],
 #                         start=date(1962, 7, 12))
 # theYardbirds = Band('The Yardbirds', *[jimMcCarty, chrisDreja, keithRelf, jeffBeck, paulSamwellSmith])
+#
+# bands = [theBeatles, theRollingStones, theYardbirds]
 
 #%%
 # Writing to a text file - <outfile>.write(str(<obj>), <outfile>.writelines([str(<obj>)+'\n' for <obj> in <objs>])
 
 #%%
-# Demonstrate reading from a text file - <infile>.readline(), <infile>.readlines()
+# Demonstrate reading from a text file - <infile>.readline(), <infile>.readlines(), <infile>.read()
 
 #%%
 # Demonstrate writing to a binary file - pickle.dump(<obj>, <outfile>)

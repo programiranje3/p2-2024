@@ -63,13 +63,13 @@ class Musician:
 
     # Run setters and getters in the debugger
 
-    @property
-    def name(self):
-        pass
-
-    @name.setter
-    def name(self, name):
-        pass
+    # @property
+    # def name(self):
+    #     pass
+    #
+    # @name.setter
+    # def name(self, name):
+    #     pass
 
     # # Add an immutable property (no setter for it)
     # @property
@@ -165,12 +165,12 @@ class Singer(Musician):
     https://stackoverflow.com/questions/3394835/use-of-args-and-kwargs/3394902#3394902 (calling super() in constructors)
     """
 
-    # # Version 1 - no multiple inheritance
+    # # Version 1, no multiple inheritance; attrs of both superclass and subclass specified explicitly in __init__() -
+    # # calling super().__init__(<superclass attrs>) first, then adding self.<specific attr> = <specific attr> lines
     # def __init__(self, name, vocals, is_band_member=True, ):
-    #     super().__init__(name, is_band_member)
-    #     self.vocals = vocals if isinstance(vocals, Vocals) else None
 
-    # Version 2 - with multiple inheritance
+    # Version 2, with multiple inheritance; subclass attrs specified in __init__() explicitly, **kwargs for the rest -
+    # calling super().__init__(**kwargs) first, then adding self.<specific attr> = <specific attr> lines
     def __init__(self, vocals=Vocals.LEAD_VOCALS, **kwargs):
         pass
 
@@ -209,12 +209,12 @@ class Songwriter(Musician):
     who writes songs and plays an instrument.
     """
 
-    # # Version 1 - no multiple inheritance
+    # # Version 1, no multiple inheritance; attrs of both superclass and subclass specified explicitly in __init__() -
+    # # calling super().__init__(<superclass attrs>) first, then adding self.<specific attr> = <specific attr> lines
     # def __init__(self, name, instrument, is_band_member=True):
-    #     super().__init__(name, is_band_member)
-    #     self.instrument = instrument if isinstance(instrument, Instrument) else None
 
-    # Version 2 - with multiple inheritance
+    # Version 2, with multiple inheritance; subclass attrs specified in __init__() explicitly, **kwargs for the rest -
+    # calling super().__init__(**kwargs) first, then adding self.<specific attr> = <specific attr> lines
     def __init__(self, instrument=Instrument.RHYTHM_GUITAR, **kwargs):
         pass
 
@@ -270,9 +270,11 @@ class SingerSongwriter(Singer, Songwriter):
     """
 
     def __init__(self, **kwargs):
+        # Calling super().__init__(**kwargs) is quite sufficient if there are no subclass-specific attrs
         pass
 
     def __str__(self):
+        # Returning super().__str__() is quite sufficient if there is no need for adding something subclass-specific
         pass
 
     def __eq__(self, other):

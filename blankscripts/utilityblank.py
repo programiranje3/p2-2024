@@ -26,7 +26,7 @@ def format_date(a_date):
 # Demonstrate pathlib.Path
 # - user's home dir: Path.home()
 # - current dir: Path.cwd() (Path('.'), Path() - work well only with absolute(), e.g. Path().absolute())
-# - absolute path: <path>.absolute()
+# - absolute path: <path>.absolute(), e.g. Path().absolute(), or Path('.').absolute()
 # - parent dir: <path>.parent
 
 #%%

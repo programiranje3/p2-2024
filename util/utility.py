@@ -18,16 +18,21 @@ def format_date(a_date):
     https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes
     """
 
+    return a_date.strftime(PREFERRED_DATE_FORMAT) if isinstance(a_date, date) else a_date
+
 
 #%%
 # Test format_date(a_date)
+print(format_date(date(1964, 2, 7)))
+print(format_date('1964, 2, 7'))
 
 #%%
 # Demonstrate pathlib.Path
 # - user's home dir: Path.home()
 # - current dir: Path.cwd() (Path('.'), Path() - work well only with absolute(), e.g. Path().absolute())
-# - absolute path: <path>.absolute()
+# - absolute path: <path>.absolute(), e.g. Path().absolute(), or Path('.').absolute()
 # - parent dir: <path>.parent
+
 
 #%%
 # Demonstrate creating and removing directories
@@ -42,6 +47,7 @@ def get_project_dir():
     """Returns the Path object corresponding to the project root directory.
     """
 
+
 #%%
 # Demonstrate get_project_dir()
 
@@ -52,6 +58,8 @@ def get_data_dir():
     (by convention located right under the project root directory).
     """
 
+
 #%%
 # Demonstrate get_data_dir()
+
 

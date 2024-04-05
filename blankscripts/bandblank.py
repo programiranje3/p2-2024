@@ -156,6 +156,9 @@ class BandNameError(BandError):
     """
 
     def __init__(self, name):
+        """ It is usually sufficient just to call Exception.__init__() and pass self and an f-string that
+        includes the other argument(s) and prints the error message;
+        it can be followed by self.<other> = <other> statement(s) for completeness."""
         pass
 
 
@@ -188,11 +191,14 @@ class BandNameError(BandError):
 #                         start=date(1962, 7, 12))
 # theYardbirds = Band('The Yardbirds', *[jimMcCarty, chrisDreja, keithRelf, jeffBeck, paulSamwellSmith])
 
+# bands = [theBeatles, theRollingStones, theYardbirds]
+
+
 #%%
 # Writing to a text file - <outfile>.write(str(<obj>), <outfile>.writelines([str(<obj>)+'\n' for <obj> in <objs>])
 
 #%%
-# Demonstrate reading from a text file - <infile>.readline(), <infile>.readlines()
+# Demonstrate reading from a text file - <infile>.readline(), <infile>.readlines(), <infile>.read()
 
 #%%
 # Demonstrate writing to a binary file - pickle.dump(<obj>, <outfile>)
